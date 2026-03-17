@@ -6,14 +6,27 @@
 
 ## Files in This Repo
 
-| File | What it does |
-| --- | --- |
-| clean_text_data.py | Loads the Kaggle emotions dataset and cleans the text - lowercase, remove punctuation, numbers, emojis, and filler words |
-| bag_of_words.py | Shows how Bag of Words turns sentences into word counts, including bigrams and trigrams |
-| tfidf_scoring.py | Shows how TF-IDF scores words smarter than plain word counts |
-| train_and_test_models.py | Trains three ML models on the cleaned data and compares their accuracy |
-| train.txt | The Kaggle emotions dataset - 16,000 sentences each labelled with one of 6 emotions: sadness, anger, love, surprise, fear, joy |
-| notes.md | Plain notes on what each file does and why, written so they make sense weeks later |
+### Emotion Detection (the main project)
+
+| File                     | What it does                                                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| clean_text_data.py       | Loads the Kaggle emotions dataset and cleans the text — lowercase, remove punctuation, numbers, emojis, and filler words       |
+| bag_of_words.py          | Shows how Bag of Words turns sentences into word counts, including bigrams and trigrams                                        |
+| tfidf_scoring.py         | Shows how TF-IDF scores words smarter than plain word counts                                                                   |
+| train_and_test_models.py | Trains three ML models on the cleaned data and compares their accuracy                                                         |
+| train.txt                | The Kaggle emotions dataset — 16,000 sentences each labelled with one of 6 emotions: sadness, anger, love, surprise, fear, joy |
+| notes.md                 | Plain notes on what each file does and why, written so they make sense weeks later                                             |
+
+### Movie Recommendation System
+
+A separate mini-project that uses TF-IDF and cosine similarity to recommend movies based on their plot, genre, and tagline.
+
+| File                                                   | What it does                                                                                                           |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| movie_recommendation_system/movie_recommender.py       | The main script — loads movie data, cleans it, builds TF-IDF vectors, and finds similar movies using cosine similarity |
+| movie_recommendation_system/movies_metadata.csv        | Raw data — about 45,000 movies with info like title, plot, genres, ratings                                             |
+| movie_recommendation_system/saved_models/              | Folder holding the pre-computed pickle files — loads fast so we don't re-run everything each time                      |
+| movie_recommendation_system/cosine_similarity_notes.md | Study notes on how TF-IDF and cosine similarity actually work, with examples and diagrams                              |
 
 ---
 

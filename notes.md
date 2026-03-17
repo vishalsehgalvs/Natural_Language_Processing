@@ -12,10 +12,10 @@ This project teaches a computer to read a sentence and figure out the emotion be
 
 The steps are:
 
-1. `clean_text_data.py`        — load the dataset and clean the text
-2. `bag_of_words.py`           — demo: turn words into counts (simple)
-3. `tfidf_scoring.py`          — demo: turn words into smarter scores
-4. `train_and_test_models.py`  — train models and see who wins
+1. `clean_text_data.py` — load the dataset and clean the text
+2. `bag_of_words.py` — demo: turn words into counts (simple)
+3. `tfidf_scoring.py` — demo: turn words into smarter scores
+4. `train_and_test_models.py` — train models and see who wins
 
 ---
 
@@ -68,18 +68,21 @@ We build a dictionary like {'sadness': 0, 'anger': 1, ...} and replace the words
 
 **1. Lowercase everything**
 "Feel" and "feel" should be the same word.
+
 ```python
 df['text'] = df['text'].apply(lambda x: x.lower())
 ```
 
 **2. Remove punctuation**
 `string.punctuation` contains all common punctuation chars. `translate()` strips them all in one go.
+
 ```python
 df['text'] = df['text'].apply(remove_punctuations)
 ```
 
 **3. Remove numbers**
 Loop every character, keep only non-digits. So "iphone 15" becomes "iphone ".
+
 ```python
 return "".join(char for char in text if not char.isdigit())
 ```
@@ -87,6 +90,7 @@ return "".join(char for char in text if not char.isdigit())
 **4. Remove emojis**
 Standard English chars all have ASCII values below 128. Emojis go above 127.
 `char.isascii()` keeps standard chars, drops everything else.
+
 ```python
 return "".join(char for char in text if char.isascii())
 ```
@@ -94,11 +98,13 @@ return "".join(char for char in text if char.isascii())
 **5. Remove stopwords (filler words)**
 Stopwords are words that appear everywhere and do not add meaning — is, the, was, and, a.
 NLTK has a built-in list of 198 English stopwords. Using a set() makes lookups very fast.
+
 ```python
 stop_words = set(stopwords.words('english'))
 words = word_tokenize(text)
 return " ".join(word for word in words if word not in stop_words)
 ```
+
 `word_tokenize` splits the sentence into words properly (handles contractions better than just splitting on spaces).
 
 ### Before and after
@@ -137,12 +143,12 @@ X = vectorizer.fit_transform(documents)
 
 Vocabulary: [best, great, is, love, pasta, pizza, the]
 
-| Sentence            | best | great | is | love | pasta | pizza | the |
-|---------------------|------|-------|----|------|-------|-------|-----|
-| "i love pizza"      | 0    | 0     | 0  | 1    | 0     | 1     | 0   |
-| "pizza is the best" | 1    | 0     | 1  | 0    | 0     | 1     | 1   |
-| "i love pasta"      | 0    | 0     | 0  | 1    | 1     | 0     | 0   |
-| "pasta is great"    | 0    | 1     | 1  | 0    | 1     | 0     | 0   |
+| Sentence            | best | great | is  | love | pasta | pizza | the |
+| ------------------- | ---- | ----- | --- | ---- | ----- | ----- | --- |
+| "i love pizza"      | 0    | 0     | 0   | 1    | 0     | 1     | 0   |
+| "pizza is the best" | 1    | 0     | 1   | 0    | 0     | 1     | 1   |
+| "i love pasta"      | 0    | 0     | 0   | 1    | 1     | 0     | 0   |
+| "pasta is great"    | 0    | 1     | 1   | 0    | 1     | 0     | 0   |
 
 ### Bigrams (word pairs)
 
@@ -150,6 +156,7 @@ Problem: "not good" gets split into "not" and "good" separately.
 The model might learn "good" = positive and get confused.
 
 Bigrams fix this — they include two-word phrases as features too.
+
 ```python
 CountVectorizer(ngram_range=(1, 2))
 ```
@@ -198,7 +205,7 @@ X = vectorizer.fit_transform(documents)
 ### Reading the scores
 
 | Sentence            | best  | great | is    | love  | pasta | pizza | the   |
-|---------------------|-------|-------|-------|-------|-------|-------|-------|
+| ------------------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
 | "i love pizza"      | 0     | 0     | 0     | 0.707 | 0     | 0.707 | 0     |
 | "pizza is the best" | 0.555 | 0     | 0.438 | 0     | 0     | 0.438 | 0.555 |
 | "i love pasta"      | 0     | 0     | 0     | 0.707 | 0.707 | 0     | 0     |
@@ -211,11 +218,13 @@ X = vectorizer.fit_transform(documents)
 ### When to use TF-IDF vs plain counts
 
 Use TF-IDF when:
+
 - Your documents vary in length
 - Common filler words keep confusing the model
 - You are doing search or document comparison
 
 Bag of Words is fine when:
+
 - Data is short and simple
 - You just need a quick starting point
 
@@ -239,7 +248,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 ```
 
 - Training set: 12,800 sentences (80%)
-- Testing set:   3,200 sentences (20%)
+- Testing set: 3,200 sentences (20%)
 - `random_state=42` — fixed seed so the split is the same every run
 
 ### The fit_transform vs transform rule
@@ -283,11 +292,11 @@ Result: **86.2% accuracy — winner**
 
 ### Results side by side
 
-| Model               | How words were converted    | Accuracy |
-|---------------------|-----------------------------|----------|
-| Naive Bayes         | Bag of Words                | 76.8%    |
-| Naive Bayes         | TF-IDF                      | 66.1%    |
-| Logistic Regression | TF-IDF                      | **86.2%** |
+| Model               | How words were converted | Accuracy  |
+| ------------------- | ------------------------ | --------- |
+| Naive Bayes         | Bag of Words             | 76.8%     |
+| Naive Bayes         | TF-IDF                   | 66.1%     |
+| Logistic Regression | TF-IDF                   | **86.2%** |
 
 Takeaway: the choice of model matters just as much as how you turned words into numbers.
 
@@ -302,3 +311,54 @@ Takeaway: the choice of model matters just as much as how you turned words into 
 - TF-IDF almost always beats plain Bag of Words for real tasks — it is one extra line of code
 - `ngram_range=(1, 2)` is a safe default — adds bigrams without making the table huge
 - `random_state=42` in train_test_split keeps results reproducible across runs
+
+---
+
+## movie_recommendation_system/movie_recommender.py
+
+### What this file does
+
+A separate mini-project. Instead of classifying emotions, this one recommends similar movies.
+You give it a movie name and it comes back with 10 movies that feel the most like it.
+
+It uses the same tools from above — TF-IDF and cosine similarity — but applies them differently.
+
+### The dataset
+
+`movies_metadata.csv` — about 45,000 movies.
+Key columns we use: `title`, `overview` (the plot), `genres`, `tagline`.
+
+### The approach
+
+1. Combine each movie's plot + genres + tagline into one big blob of text called `tags`
+2. Clean that text the same way we do in this project (lowercase, remove filler words, lemmatize)
+3. Convert every movie's tags into a TF-IDF vector
+4. When someone asks for recommendations, calculate cosine similarity between their movie and every other movie
+5. Return the 10 highest scoring matches
+
+### What cosine similarity does here
+
+Think of each movie as a point in space. Movies that talk about similar things (same genres, similar plot words) will point in the same direction. Cosine similarity measures that angle — closer to 0° means more similar.
+
+Full notes on the theory are in `cosine_similarity_notes.md` inside the same folder.
+
+### The saved_models folder
+
+Running TF-IDF on 45,000 movies takes a while.
+So after building everything, we save it all as pickle files in `saved_models/`:
+
+| File             | What's inside                                     |
+| ---------------- | ------------------------------------------------- |
+| tfidf_matrix.pkl | The number grid — 45,000 movies × 50,000 features |
+| indices.pkl      | Title → row number lookup                         |
+| df.pkl           | The cleaned movie dataframe                       |
+| tfidf.pkl        | The trained TF-IDF vectorizer                     |
+
+When we build the FastAPI web app, it'll just load these files on startup instead of re-computing everything.
+
+### Example output
+
+```python
+recommend('Toy Story')
+# → Toy Story 2, Toy Story 3, Small Fry, Superstar Goofy, ...
+```
