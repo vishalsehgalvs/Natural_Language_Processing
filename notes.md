@@ -95,9 +95,8 @@ Standard English chars all have ASCII values below 128. Emojis go above 127.
 return "".join(char for char in text if char.isascii())
 ```
 
-**5. Remove stopwords (filler words)**
-Stopwords are words that appear everywhere and do not add meaning — is, the, was, and, a.
-NLTK has a built-in list of 198 English stopwords. Using a set() makes lookups very fast.
+**5. Try removing common words (only when it helps)**
+Words such as "the" appear in many sentences, so removing them can make a simple word-count model smaller. But "not" changes the meaning of "good" to "not good". Check which words the stopword list removes before using it for emotion or sentiment prediction. Keep negations when they matter, compare scores with and without this step, and learn any text-processing rules on training data only.
 
 ```python
 stop_words = set(stopwords.words('english'))
@@ -114,7 +113,7 @@ Before:  "I didn't feel humiliated"  ->  sadness
 After:   "feel humiliated"           ->  0
 ```
 
-The noise is gone. Only the meaningful words remain.
+This shorter text is easier for a word-count model to handle, but some meaning may be lost. Removing punctuation can hide emphasis, and removing every non-ASCII character also removes words in many languages, not just emoji. Try the original text alongside the cleaned text and compare results on held-out examples before deciding that cleaning improves the model.
 
 ---
 
